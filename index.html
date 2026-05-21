@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Oxígeno Champions League</title>
+<!--
+  Fuentes:
+  - Titles/display: Bebas Neue (solo para TITULOS GRANDES donde legibilidad no es problema)
+  - Subtitles/labels: Oswald (reemplaza Barlow Condensed — mucho más legible condensed en pequeño)
+  - Body/amounts: Inter Tight (reemplaza Barlow — excelente legibilidad en cualquier tamaño)
+-->
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter+Tight:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green:        #2EFF7C;
+    --green-solid:  #00C853;
+    --green-dark:   #005C22;
+    --green-dim:    rgba(46,255,124,0.15);
+    --green-bar:    rgb(28 216 98);
+    --cyan:         #00F0FF;
+    --white:        #FFFFFF;
+    --off:          #C8E8D4;
+    --black:        #020C07;
+    --dark:         #061209;
+    --gold:         #FFD000;
+    --gold-bg:      #5A3A00;
+    --silver:       #C8D4DC;
+    --silver-bg:    #2A3840;
+    --bronze:       #E07800;
+    --bronze-bg:    #5A2E00;
+    --fourth:       #6A8070;
+    --fourth-bg:    #1E2E22;
+  }
+
+  a { text-decoration: none; color: inherit; }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    background: var(--dark);
+    display: flex;
+    justify-content: center;
+    font-family: 'Inter Tight', sans-serif;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* ══ POSTER ══ */
+  .poster {
+    width: 100%;
+    max-width: 794px;
+    min-height: 100svh;
+    position: relative;
+    overflow: hidden;
+    background: var(--dark);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── BGs ── */
+  .bg-top {
+    position:absolute; top:0; left:0; right:0; height:55%;
+    background: radial-gradient(ellipse 130% 90% at 50% -5%, #004A1C 0%, #001E09 55%, transparent 100%);
+    z-index:0;
+  }
+  .bg-bottom {
+    position:absolute; bottom:0; left:0; right:0; height:60%;
+    background: linear-gradient(180deg, transparent 0%, #020D06 50%, #010804 100%);
+    z-index:0;
+  }
+  .bg-hex {
+    position:absolute; inset:0; z-index:0; opacity:.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='98'%3E%3Cpath d='M28 66L0 50V18L28 2l28 16v32L28 66zm0-8L7 47V26L28 10l21 16v21L28 58z' fill='%232EFF7C'/%3E%3C/svg%3E");
+  }
+
+  /* corners replaced by .hero-frame */
+  .corner { display: none; }
+
+  .hero-frame {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border-radius: 20px;
+    pointer-events: none;
+    z-index: 8;
+    box-shadow: 0 0 24px rgba(0,200,83,0.2), inset 0 0 20px rgba(0,200,83,0.04);
+  }
+  /* ── CONTENT ── */
+  .content {
+    position:relative; z-index:10;
+    display:flex; flex-direction:column; align-items:center;
+    flex:1;
+  }
+
+  /* ══ HERO ══ */
+  .hero {
+    width:100%;
+    padding: clamp(24px,4vw,44px) clamp(24px,6vw,40px) clamp(16px,3vw,40px);
+    display:flex; flex-direction:column; align-items:center;
+    text-align:center; gap:0;
+  }
+
+  .logo-wrap {
+    width: clamp(80px,65%,220px);
+    padding: 10px 20px;
+    background: rgba(0,0,0,0.72);
+    border: 2px solid rgba(46,255,124,0.45);
+    border-radius: 10px;
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom: clamp(6px,3vw,12px);
+    box-shadow: 0 0 36px rgba(46,255,124,0.18), inset 0 0 16px rgba(46,255,124,0.05);
+  }
+  .logo-wrap img { width:100%; height:auto; display:block; }
+
+  .tag-vuelve {
+    display:inline-flex; align-items:center; gap:8px;
+    background: var(--green-bar);
+    color: var(--black);
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: clamp(14px, 3.5vw, 18px);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 22px;
+    margin-bottom: -25px;
+    clip-path: polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);
+    border-radius: 7px;
+  }
+
+  .logo-champions {
+    padding: 30px;
+    background: rgba(0,0,0,0.72);
+    border: 3px solid rgba(46,255,124,0.45);
+    border-radius: 10px;
+    margin: clamp(6px,2vw,12px) 0 clamp(8px,2vw,14px);
+  }
+  .logo-champions img { width: clamp(240px,55vw,420px); height:auto; display:block; }
+
+  .hero-tagline {
+    display:inline-flex; align-items:center; gap:8px;
+    background: rgba(47,255,124,0.2);
+    border-bottom: 2px solid rgba(47,255,124,0.35);
+    color: var(--white);
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(12px, 3.5vw, 19px);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 7px 22px;
+    border-radius: 4px;
+    clip-path: polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);
+    border-radius: 7px;
+  }
+
+  .line-div {
+    width:100%; height:2px;
+    background: linear-gradient(90deg, transparent, var(--green-solid) 30%, var(--cyan) 70%, transparent);
+  }
+
+  /* ══ INFO BAR ══ */
+  .info-bar {
+    width:100%;
+    position: relative;
+    z-index: 15;
+    /* bleed 12px left+right to cover the frame's vertical borders */
+    margin-left: -12px;
+    margin-right: -12px;
+    padding-left: calc(clamp(20px,6vw,56px) + 12px);
+    padding-right: calc(clamp(20px,6vw,56px) + 12px);
+    background: linear-gradient(270deg, #2acb65 0%, #00c351f5 100%);
+    border-top: 2px solid var(--green);
+    border-bottom: 2px solid var(--green-solid);
+    padding: clamp(14px,2.5vw,20px) clamp(20px,6vw,56px);
+    display:flex; align-items:center; justify-content:space-between;
+    gap: clamp(10px,3vw,20px);
+    flex-wrap: wrap;
+  }
+
+  .info-col { display:flex; flex-direction:column; gap:4px; }
+
+  .info-eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: clamp(11px, 2.5vw, 18px);
+    letter-spacing: 4px;
+    color: var(--black);
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+
+  .info-main {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(34px, 7.5vw, 50px);
+    letter-spacing: 2px;
+    color: var(--black);
+    line-height: 1.05;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .info-badge {
+    background: var(--black);
+    color: var(--white);
+    padding: 2px 10px 0;
+    border-radius: 5px;
+    font-size: clamp(32px, 7vw, 48px);
+    line-height: 1.1;
+  }
+
+  /* right side */
+  .grass-col {
+    display:flex; flex-direction:column; align-items:flex-end; gap:4px;
+  }
+  .grass-eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: clamp(11px, 2.5vw, 18px);
+    letter-spacing: 4px;
+    color: var(--black);
+    text-transform: uppercase;
+    opacity: 0.75;
+    text-align: right;
+  }
+  .grass-main {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(26px, 5.5vw, 36px);
+    letter-spacing: 2px;
+    color: var(--black);
+    text-align: right;
+    line-height: 1;
+  }
+  .grass-sub {
+    background: rgba(0,0,0,0.65);
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 700;
+    font-size: clamp(12px, 2.5vw, 15px);
+    letter-spacing: 1px;
+    color: var(--white);
+    text-align: right;
+  }
+
+  /* ══ PREMIACIÓN ══ */
+  .premio-section {
+    width:100%;
+    padding: clamp(24px,4vw,38px) clamp(14px,4.5vw,44px) 0;
+  }
+
+  .section-title {
+    display:flex; align-items:center; justify-content:center; gap:14px;
+    margin-bottom: clamp(20px,4vw,32px);
+  }
+  .stline { flex:1; height:2px; background:linear-gradient(90deg,transparent,var(--green-solid)); }
+  .stline.r { background:linear-gradient(90deg,var(--green-solid),transparent); }
+
+  .section-title h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 9vw, 62px);
+    letter-spacing: 7px;
+    color: var(--white);
+    white-space: nowrap;
+    text-shadow: 0 0 28px rgba(0,240,255,0.18);
+  }
+  .section-title h2 em { color:var(--green); font-style:normal; }
+
+  /* ── PODIUM ── */
+  .podium-wrap {
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap: clamp(5px,1.2vw,10px);
+  }
+
+  .podium-slot {
+    flex:1;
+    max-width: clamp(110px,24vw,170px);
+    display:flex; flex-direction:column; align-items:center;
+  }
+
+  /* amount + label ABOVE block */
+  .p-amount {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 800;
+    font-size: clamp(15px, 3.2vw, 22px);
+    letter-spacing: 0px;
+    text-align: center;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .p-place {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: clamp(9px, 1.8vw, 12px);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    margin-bottom: 6px;
+  }
+
+  /* THE BLOCK */
+  .p-block {
+    width:100%;
+    border-radius: 8px 8px 0 0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-end;
+    padding-bottom: clamp(10px,2vw,16px);
+    position:relative; overflow:hidden;
+  }
+  .p-block::after {
+    content:'';
+    position:absolute; inset:0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.09) 0%, transparent 55%);
+    pointer-events:none;
+  }
+
+  /* big number INSIDE */
+  .p-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 13vw, 88px);
+    line-height: 1;
+    position:relative; z-index:2;
+    margin-bottom: clamp(-8px, 3.5vw, -15px;);
+  }
+
+  /* slot heights + colors */
+  .slot-1 .p-block {
+    height: clamp(170px,30vw,220px);
+    background: linear-gradient(180deg, #7a6a00 0%, #3c3a00 100%);
+    border-top: 4px solid var(--gold);
+    box-shadow: 0 -6px 32px rgba(255,208,0,0.3);
+  }
+  .slot-1 .p-num    { color: var(--gold); }
+  .slot-1 .p-amount { color: var(--gold); }
+
+  .slot-2 .p-block {
+    height: clamp(128px,22vw,165px);
+    background: linear-gradient(180deg, #374550 0%, #25303e 100%);
+    border-top: 4px solid var(--silver);
+    box-shadow: 0 -4px 24px rgba(200,212,220,0.15);
+  }
+  .slot-2 .p-num    { color: var(--silver); }
+  .slot-2 .p-amount { color: var(--silver); }
+
+  .slot-3 .p-block {
+    height: clamp(100px,17vw,132px);
+    background: linear-gradient(180deg, #603000 0%, #462108 100%);
+    border-top: 4px solid var(--bronze);
+    box-shadow: 0 -4px 24px rgba(224,120,0,0.2);
+  }
+  .slot-3 .p-num    { color: var(--bronze); }
+  .slot-3 .p-amount { color: var(--bronze); }
+
+  .slot-4 .p-block {
+    height: clamp(76px,13vw,100px);
+    background: linear-gradient(180deg, #263826 0%, #1b2d1b 100%);
+    border-top: 4px solid var(--fourth);
+  }
+  .slot-4 .p-num    { color: var(--fourth); }
+  .slot-4 .p-amount { color: var(--fourth); }
+
+  .podium-base {
+    width:100%; height:6px;
+    background: linear-gradient(90deg, var(--green-dark), var(--green), var(--cyan), var(--green), var(--green-dark));
+    box-shadow: 0 0 20px rgba(46,255,124,0.5);
+  }
+
+  /* ══ SPECIAL PRIZES ══ */
+  .special-section {
+    width:100%;
+    padding: clamp(16px,3vw,26px) clamp(14px,4.5vw,44px) 8px;
+    display:flex; flex-direction:column; gap:8px;
+  }
+
+  .special-item {
+    display:flex; align-items:center; gap:12px;
+    background: rgba(46,255,124,0.08);
+    border: 1.5px solid rgba(46,255,124,0.25);
+    border-radius: 8px;
+    padding: clamp(10px,2vw,14px) clamp(14px,3vw,22px);
+  }
+
+  .s-icon {
+    display:flex; align-items:center; justify-content:center;
+    width: clamp(38px,7vw,46px);
+    height: clamp(38px,7vw,46px);
+    border-radius: 50%;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(46,255,124,0.2);
+    font-size: clamp(18px,3.5vw,24px);
+    flex-shrink: 0;
+  }
+
+  .s-text {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 700;
+    font-size: clamp(15px, 3.2vw, 20px);
+    letter-spacing: 0.5px;
+    color: var(--white);
+    text-transform: uppercase;
+    line-height: 1.3;
+  }
+  .s-text strong {
+    color: var(--green);
+  }
+
+  /* ══ FOOTER ══ */
+  .footer {
+    width:100%; margin-top:auto;
+    padding: clamp(14px,3vw,20px) clamp(14px,4.5vw,44px) clamp(24px,5vw,36px);
+    border-top: 1.5px solid rgba(46,255,124,0.2);
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+  }
+
+  .contact-label-top {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: clamp(12px,2.5vw,15px);
+    letter-spacing: 4px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .contact-row {
+    display:flex; align-items:center; justify-content:center;
+    gap: clamp(6px,2vw,12px);
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .contact-block {
+    display:flex; align-items:center;
+    gap: clamp(4px,1vw,8px);
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(46,255,124,0.2);
+    border-radius: 8px;
+    padding: clamp(8px,1.5vw,12px) clamp(12px,2.5vw,18px);
+    flex: 1;
+    min-width: clamp(160px,42vw,220px);
+    max-width: 280px;
+    justify-content: center;
+  }
+
+  .contact-block a{
+    text-decoration: none;
+  }
+
+  .whatsapp-icon {
+    width: clamp(32px,6vw,40px);
+    height: clamp(32px,6vw,40px);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .contact-info {
+    display:flex; flex-direction:column; align-items:flex-start;
+    gap: 0;
+  }
+
+  .contact-num {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 800;
+    font-size: clamp(14px, 4.5vw, 28px);
+    letter-spacing: 1px;
+    color: var(--white);
+    line-height: 1.1;
+    opacity: 0.7;
+  }
+
+  .contact-num a{
+    color: var(--white);
+    text-decoration: none;
+  }
+
+  .contact-name {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: clamp(12px, 2.5vw, 15px);
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+  }
+
+  .min-note {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: clamp(10px, 2vw, 13px);
+    color: rgba(255,255,255,0.28);
+    letter-spacing: 0.5px;
+    text-align: center;
+    font-style: italic;
+    margin-top: 4px;
+  }
+
+  /* ══ RESPONSIVE BREAKPOINTS ══ */
+
+  /* Tablet: 480–794px */
+  @media (max-width: 620px) {
+    .info-bar {
+      justify-content: center;
+      gap: 16px;
+    }
+    .info-col, .grass-col {
+      align-items: center;
+      text-align: center;
+    }
+    .grass-col { align-items: center; }
+    .grass-eyebrow, .grass-main, .grass-sub { text-align: center; }
+
+    .podium-slot { max-width: clamp(80px,22vw,140px); }
+
+    .section-title h2 { letter-spacing: 4px; }
+  }
+
+  /* Mobile: up to 480px */
+  @media (max-width: 480px) {
+    body { padding: 0; }
+
+    .poster { min-height: 100svh; border-radius: 0; }
+
+    .hero { padding: 20px 16px 14px; }
+
+    .logo-wrap { width: clamp(80px,80vw,140px); }
+
+    .info-bar { padding: 14px 16px; }
+
+    .premio-section { padding: 20px 10px 0; }
+
+    .podium-slot { max-width: clamp(72px,21vw,120px); }
+
+    .p-place { font-size: 9px; letter-spacing: 0.5px; }
+
+    .section-title { gap: 8px; }
+    .section-title h2 { font-size: clamp(34px,9vw,48px); letter-spacing: 3px; }
+
+    .special-section { padding: 14px 12px 8px; }
+
+    .footer { padding: 14px 12px 24px; }
+
+    .contact-block {
+      min-width: clamp(140px,42vw,180px);
+      padding: 8px 12px;
+    }
+  }
+
+  /* Very small (320px) */
+  @media (max-width: 360px) {
+    .contact-row { flex-direction: column; align-items: stretch; }
+    .contact-block { max-width: 100%; min-width: unset; justify-content: flex-start; }
+    .info-main { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="poster">
+  <div class="bg-top"></div>
+  <div class="bg-bottom"></div>
+  <div class="bg-hex"></div>
+
+  <div class="hero-frame" id="heroFrame"></div>
+
+  <div class="content">
+
+    <!-- ══ HERO ══ -->
+    <div class="hero">
+
+      <div class="tag-vuelve">⚡ Vuelve la ⚡</div>
+
+      <div class="logo-champions">
+        <img src="img/oxigeno-champions-logo.png" alt="Oxígeno Champions League">
+      </div>
+
+      <div class="hero-tagline">🏆 El mejor campeonato de zona 🏆</div>
+    </div>
+
+    <div class="line-div"></div>
+
+    <!-- ══ INFO BAR ══ -->
+    <div class="info-bar">
+      <div class="info-col">
+        <div class="info-eyebrow">Fecha de inicio</div>
+        <div class="info-main">
+          Domingo&nbsp;<span class="info-badge">11</span>&nbsp;de&nbsp;<span class="info-badge">Julio</span>
+        </div>
+      </div>
+
+      <div class="grass-col">
+        <div class="grass-eyebrow">Cancha</div>
+        <div class="grass-main">Césped Nuevo</div>
+        <div class="grass-sub">Última Generación 🌱</div>
+      </div>
+    </div>
+
+    <!-- ══ PREMIACIÓN ══ -->
+    <div class="premio-section">
+      <div class="section-title">
+        <div class="stline"></div>
+        <h2>PREMIACIÓN</h2>
+        <div class="stline r"></div>
+      </div>
+
+      <!-- PODIUM: 2nd · 1st · 3rd · 4th -->
+      <div class="podium-wrap">
+
+        <div class="podium-slot slot-2">
+          <div class="p-amount">₡500.000</div>
+          <div class="p-place">Segundo Lugar</div>
+          <div class="p-block"><div class="p-num">2</div></div>
+        </div>
+
+        <div class="podium-slot slot-1">
+          <div class="p-amount">₡1.000.000</div>
+          <div class="p-place">Primer Lugar</div>
+          <div class="p-block"><div class="p-num">1</div></div>
+        </div>
+
+        <div class="podium-slot slot-3">
+          <div class="p-amount">₡250.000</div>
+          <div class="p-place">Tercer Lugar</div>
+          <div class="p-block"><div class="p-num">3</div></div>
+        </div>
+
+        <div class="podium-slot slot-4">
+          <div class="p-amount">₡100.000</div>
+          <div class="p-place">Cuarto Lugar</div>
+          <div class="p-block"><div class="p-num">4</div></div>
+        </div>
+
+      </div>
+      <div class="podium-base"></div>
+    </div>
+
+    <!-- ══ SPECIAL PRIZES ══ -->
+    <div class="special-section">
+      <div class="special-item">
+        <div class="s-icon">🧤</div>
+        <div class="s-text">Premio al <strong>Mejor Portero</strong> del Torneo</div>
+      </div>
+      <div class="special-item">
+        <div class="s-icon">⚽</div>
+        <div class="s-text">Premio al <strong>Goleador</strong> del Torneo</div>
+      </div>
+    </div>
+
+    <!-- ══ FOOTER ══ -->
+    <div class="footer">
+      <div class="contact-label-top">Información</div>
+      <div class="contact-row">
+        <a href="https://wa.me/+50671020088">
+        <div class="contact-block">
+          <div class="whatsapp-icon">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+              <circle cx="16" cy="16" r="16" fill="#25D366"/>
+              <path d="M22.9 9.06A9.77 9.77 0 0 0 16.04 6C10.52 6 6.04 10.48 6.04 16a9.94 9.94 0 0 0 1.34 4.97L6 26l5.18-1.36A9.93 9.93 0 0 0 16.04 26c5.52 0 9.96-4.48 9.96-10 0-2.67-1.04-5.18-2.1-6.94zm-6.86 15.37a8.26 8.26 0 0 1-4.2-1.15l-.3-.18-3.08.81.82-3-.2-.31A8.28 8.28 0 0 1 7.7 16c0-4.6 3.74-8.34 8.34-8.34 2.23 0 4.32.87 5.89 2.45a8.28 8.28 0 0 1 2.44 5.9c0 4.6-3.74 8.34-8.33 8.34zm4.57-6.24c-.25-.12-1.47-.73-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.53.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.22-1.46-1.37-1.7-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.87.85-.87 2.07s.89 2.4 1.01 2.57c.12.17 1.75 2.67 4.24 3.74.59.26 1.06.41 1.42.52.6.19 1.14.16 1.57.1.48-.07 1.47-.6 1.68-1.18.2-.58.2-1.08.14-1.18-.06-.1-.22-.16-.47-.28z" fill="#fff"/>
+            </svg>
+          </div>
+          <div class="contact-info">
+            <span class="contact-num">7102 0088</span>
+            <span class="contact-name">Andrés</span>
+          </div>
+        </div>
+        </a>
+        <a href="https://wa.me/+50670761474">
+        <div class="contact-block">
+          <div class="whatsapp-icon">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+              <circle cx="16" cy="16" r="16" fill="#25D366"/>
+              <path d="M22.9 9.06A9.77 9.77 0 0 0 16.04 6C10.52 6 6.04 10.48 6.04 16a9.94 9.94 0 0 0 1.34 4.97L6 26l5.18-1.36A9.93 9.93 0 0 0 16.04 26c5.52 0 9.96-4.48 9.96-10 0-2.67-1.04-5.18-2.1-6.94zm-6.86 15.37a8.26 8.26 0 0 1-4.2-1.15l-.3-.18-3.08.81.82-3-.2-.31A8.28 8.28 0 0 1 7.7 16c0-4.6 3.74-8.34 8.34-8.34 2.23 0 4.32.87 5.89 2.45a8.28 8.28 0 0 1 2.44 5.9c0 4.6-3.74 8.34-8.33 8.34zm4.57-6.24c-.25-.12-1.47-.73-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.53.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.22-1.46-1.37-1.7-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.87.85-.87 2.07s.89 2.4 1.01 2.57c.12.17 1.75 2.67 4.24 3.74.59.26 1.06.41 1.42.52.6.19 1.14.16 1.57.1.48-.07 1.47-.6 1.68-1.18.2-.58.2-1.08.14-1.18-.06-.1-.22-.16-.47-.28z" fill="#fff"/>
+            </svg>
+          </div>
+          <div class="contact-info">
+            <span class="contact-num">7076 1474</span>
+            <span class="contact-name">Diego</span>
+          </div>
+        </div>
+        </a>
+      </div>
+      <div class="min-note">Premiación sujeta a un mínimo de 18 equipos inscritos</div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
